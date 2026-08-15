@@ -35,7 +35,7 @@ class AuthService
     {
         if (!Auth::attempt($credentials)) {
             throw ValidationException::withMessages([
-                'email' => ['Invalid email or password.'],
+                'email' => ['Invalid email or password. Please register if you do not have an account.'],
             ]);
         }
 

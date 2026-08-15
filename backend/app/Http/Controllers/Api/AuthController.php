@@ -17,9 +17,7 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $response = $this->authService->register(
-            $request->validated()
-        );
+        $response = $this->authService->register($request->validated());
 
         return response()->json([
             'message' => $response['message'],
@@ -30,9 +28,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $response = $this->authService->login(
-            $request->validated()
-        );
+        $response = $this->authService->login($request->validated());
 
         return response()->json([
             'message' => $response['message'],
@@ -43,10 +39,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $response = $this->authService->logout(
-            $request->user()
-        );
-
+        $response = $this->authService->logout($request->user());
         return response()->json($response);
     }
 }

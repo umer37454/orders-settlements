@@ -1,18 +1,13 @@
 <?php
 
 return [
-
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
-        'https://orders-settlements-zeta.vercel.app',
-    ],
+    'allowed_origins' => [ env('CORS_ALLOWED_ORIGINS', 'http://localhost:5173')],
 
-    'allowed_origins_patterns' => [
-        '#^https://orders-settlements-zeta.*\.vercel\.app$#',
-    ],
+    'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
@@ -21,5 +16,4 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => true,
-
 ];

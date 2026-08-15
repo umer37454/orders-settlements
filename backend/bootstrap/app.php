@@ -25,9 +25,23 @@ return Application::configure(basePath: dirname(__DIR__))
         );
 
         $exceptions->render(function (Throwable $e, Request $request) {
-
             if (!$request->is('api/*')) {
                 return null;
+            }
+
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'errors' => $e->errors(),
+                ], $e->status);
+            }
+
+            if ($e instanceof \Illuminate\Auth\AuthenticationException) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthenticated.',
+                ], 401);
             }
 
             $status = $e instanceof HttpExceptionInterface
@@ -46,7 +60,6 @@ return Application::configure(basePath: dirname(__DIR__))
                 ]);
             }
 
-            // DB error ho ya 500+ ho, to hamesha generic message bhejo
             $message = ($status >= 500 || $isDbError)
                 ? 'Something went wrong.'
                 : $e->getMessage();

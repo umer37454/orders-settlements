@@ -1,4 +1,4 @@
-import { Form, Alert } from "react-bootstrap";
+import { Form, Alert, Row, Col } from "react-bootstrap";
 import { useFormik } from "formik";
 
 import AppInput from "../../../components/common/AppInput";
@@ -7,9 +7,11 @@ import Auth from "../../../components/layouts/Auth";
 
 import loginSchema from "../../../validation/auth/loginSchema";
 import { useAuth } from "../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -77,15 +79,29 @@ const Login = () => {
                     }
                 />
 
-                <div className="d-grid">
-                    <AppButton
-                        type="submit"
-                        loading={formik.isSubmitting}
-                    >
-                        Login
-                    </AppButton>
-                </div>
+                <Row className="g-2">
+                    <Col>
+                        <div className="d-grid">
+                            <AppButton
+                                type="submit"
+                                loading={formik.isSubmitting}
+                            >
+                                Login
+                            </AppButton>
+                        </div>
+                    </Col>
 
+                    <Col>
+                        <div className="d-grid">
+                            <AppButton
+                                type="button"
+                                onClick={() => navigate("/register")}
+                            >
+                                Register
+                            </AppButton>
+                        </div>
+                    </Col>
+                </Row>
             </Form>
         </Auth>
     );
