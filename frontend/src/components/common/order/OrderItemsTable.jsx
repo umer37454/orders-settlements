@@ -119,30 +119,35 @@ const OrderItemsTable = ({
                                     <strong>{subtotal.toFixed(2)}</strong>
                                 </td>
 
-                                <OverlayTrigger
-                                    placement="top"
-                                    overlay={
-                                        <Tooltip>
-                                            Cannot delete item because payments have already been recorded for this order.
-                                        </Tooltip>
-                                    }
-                                >
-                                    <span className="d-inline-block">
-                                        <Button
-                                            variant="danger"
-                                            size="sm"
-                                            onClick={() => onRemove(index)}
-                                            disabled={readOnly || disableDelete}
-                                            style={
-                                                readOnly || disableDelete
-                                                    ? { pointerEvents: "none" }
-                                                    : {}
-                                            }
-                                        >
-                                            Delete
-                                        </Button>
-                                    </span>
-                                </OverlayTrigger>
+                                {disableDelete ? (
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={
+                                            <Tooltip>
+                                                Cannot delete item because payments have already been recorded for this order.
+                                            </Tooltip>
+                                        }
+                                    >
+                                        <span className="d-inline-block">
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
+                                                disabled
+                                            >
+                                                Delete
+                                            </Button>
+                                        </span>
+                                    </OverlayTrigger>
+                                ) : (
+                                    <Button
+                                        variant="danger"
+                                        size="sm"
+                                        onClick={() => onRemove(index)}
+                                        disabled={readOnly}
+                                    >
+                                        Delete
+                                    </Button>
+                                )}
                             </tr>
                         );
                     })}
