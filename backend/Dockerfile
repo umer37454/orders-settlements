@@ -17,13 +17,14 @@ COPY . .
 RUN composer dump-autoload --optimize
 
 # ---------- Runtime ----------
-FROM php:8.4-cli
+FROM php:8.4-apache
 
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     git \
-    && docker-php-ext-install pdo_mysql zip
+    && docker-php-ext-install pdo_mysql zip \
+    && a2enmod rewrite
 
 WORKDIR /var/www/html
 
@@ -32,8 +33,18 @@ COPY --from=composer /app /var/www/html
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
+
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 EXPOSE 10000
 
-CMD php artisan config:clear \
-    && php artisan migrate --force \
-    && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+# Port 10000 fix kar diya hai aur optimal caching commands add kiye hain
+CMD sed -i "s/Listen 80/Listen 10000/g" /etc/apache2/ports.conf \
+    && sed -i "s/<VirtualHost \*:80>/<VirtualHost *:10000>/g" /etc/apache2/sites-available/000-default.conf \
+    && php artisan config:clear \
+    && php artisan route:clear \
+    && php artisan view:clear \
+    && php artisan config:cache \
+    && php artisan route:cache \
+    && apache2-foreground
