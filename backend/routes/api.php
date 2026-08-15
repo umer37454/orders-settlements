@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/health', function () {
+Route::get('/health', function () {
     return response()->json(['status' => 'ok']);
 });
 
